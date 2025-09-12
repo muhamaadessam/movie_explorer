@@ -10,43 +10,41 @@ import 'package:movie_explorer/movies/presentation/controller/movies_state.dart'
 import 'package:movie_explorer/movies/presentation/screens/movie_detail_screen.dart';
 
 class NowPlayingComponent extends StatelessWidget {
-  const NowPlayingComponent({Key? key}) : super(key: key);
+  const NowPlayingComponent({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<MoviesBloc, MoviesState>(
-        buildWhen: (previous, current) =>
-            previous.nowPlayingState != current.nowPlayingState,
-        builder: (context, state) {
-          switch (state.nowPlayingState) {
-            case RequestState.loading:
-              return const SizedBox(
-                height: 400.0,
-                child: Center(
-                  child: CircularProgressIndicator(),
+      buildWhen:
+          (previous, current) =>
+              previous.nowPlayingState != current.nowPlayingState,
+      builder: (context, state) {
+        switch (state.nowPlayingState) {
+          case RequestState.loading:
+            return const SizedBox(
+              height: 400.0,
+              child: Center(child: CircularProgressIndicator()),
+            );
+          case RequestState.loaded:
+            return FadeIn(
+              duration: const Duration(milliseconds: 500),
+              child: CarouselSlider(
+                options: CarouselOptions(
+                  height: 400.0,
+                  viewportFraction: 1.0,
+                  onPageChanged: (index, reason) {},
                 ),
-              );
-            case RequestState.loaded:
-              return FadeIn(
-                duration: const Duration(milliseconds: 500),
-                child: CarouselSlider(
-                  options: CarouselOptions(
-                    height: 400.0,
-                    viewportFraction: 1.0,
-                    onPageChanged: (index, reason) {},
-                  ),
-                  items: state.nowPlayingMovies.map(
-                    (item) {
+                items:
+                    state.nowPlayingMovies.map((item) {
                       return GestureDetector(
                         key: const Key('openMovieMinimalDetail'),
                         onTap: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  MovieDetailScreen(
-                                id: item.id,
-                              ),
+                              builder:
+                                  (BuildContext context) =>
+                                      MovieDetailScreen(id: item.id),
                             ),
                           );
                         },
@@ -72,8 +70,9 @@ class NowPlayingComponent extends StatelessWidget {
                               blendMode: BlendMode.dstIn,
                               child: CachedNetworkImage(
                                 height: 560.0,
-                                imageUrl:
-                                    ApiConstance.imageUrl(item.backdropPath),
+                                imageUrl: ApiConstance.imageUrl(
+                                  item.backdropPath,
+                                ),
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -83,8 +82,9 @@ class NowPlayingComponent extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
                                   Padding(
-                                    padding:
-                                        const EdgeInsets.only(bottom: 16.0),
+                                    padding: const EdgeInsets.only(
+                                      bottom: 16.0,
+                                    ),
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
@@ -106,8 +106,9 @@ class NowPlayingComponent extends StatelessWidget {
                                     ),
                                   ),
                                   Padding(
-                                    padding:
-                                        const EdgeInsets.only(bottom: 16.0),
+                                    padding: const EdgeInsets.only(
+                                      bottom: 16.0,
+                                    ),
                                     child: Text(
                                       item.title,
                                       textAlign: TextAlign.center,
@@ -123,18 +124,16 @@ class NowPlayingComponent extends StatelessWidget {
                           ],
                         ),
                       );
-                    },
-                  ).toList(),
-                ),
-              );
-            case RequestState.error:
-              return SizedBox(
-                height: 400.0,
-                child: Center(
-                  child: Text(state.nowPlayingMessage),
-                ),
-              );
-          }
-        });
+                    }).toList(),
+              ),
+            );
+          case RequestState.error:
+            return SizedBox(
+              height: 400.0,
+              child: Center(child: Text(state.nowPlayingMessage)),
+            );
+        }
+      },
+    );
   }
 }

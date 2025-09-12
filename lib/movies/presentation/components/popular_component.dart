@@ -9,21 +9,19 @@ import 'package:movie_explorer/movies/presentation/controller/movies_state.dart'
 import 'package:shimmer/shimmer.dart';
 
 class PopularComponent extends StatelessWidget {
-  const PopularComponent({Key? key}) : super(key: key);
+  const PopularComponent({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<MoviesBloc, MoviesState>(
-      buildWhen: (previous, current) =>
-          previous.popularState != current.popularState,
+      buildWhen:
+          (previous, current) => previous.popularState != current.popularState,
       builder: (context, state) {
         switch (state.popularState) {
           case RequestState.loading:
             return const SizedBox(
               height: 170.0,
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
+              child: Center(child: CircularProgressIndicator()),
             );
           case RequestState.loaded:
             return FadeIn(
@@ -44,26 +42,29 @@ class PopularComponent extends StatelessWidget {
                           /// TODO : NAVIGATE TO  MOVIE DETAILS
                         },
                         child: ClipRRect(
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(8.0)),
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(8.0),
+                          ),
                           child: CachedNetworkImage(
                             width: 120.0,
                             fit: BoxFit.cover,
                             imageUrl: ApiConstance.imageUrl(movie.backdropPath),
-                            placeholder: (context, url) => Shimmer.fromColors(
-                              baseColor: Colors.grey[850]!,
-                              highlightColor: Colors.grey[800]!,
-                              child: Container(
-                                height: 170.0,
-                                width: 120.0,
-                                decoration: BoxDecoration(
-                                  color: Colors.black,
-                                  borderRadius: BorderRadius.circular(8.0),
+                            placeholder:
+                                (context, url) => Shimmer.fromColors(
+                                  baseColor: Colors.grey[850]!,
+                                  highlightColor: Colors.grey[800]!,
+                                  child: Container(
+                                    height: 170.0,
+                                    width: 120.0,
+                                    decoration: BoxDecoration(
+                                      color: Colors.black,
+                                      borderRadius: BorderRadius.circular(8.0),
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
-                            errorWidget: (context, url, error) =>
-                                const Icon(Icons.error),
+                            errorWidget:
+                                (context, url, error) =>
+                                    const Icon(Icons.error),
                           ),
                         ),
                       ),
@@ -75,9 +76,7 @@ class PopularComponent extends StatelessWidget {
           case RequestState.error:
             return SizedBox(
               height: 170.0,
-              child: Center(
-                child: Text(state.nowPlayingMessage),
-              ),
+              child: Center(child: Text(state.nowPlayingMessage)),
             );
         }
       },

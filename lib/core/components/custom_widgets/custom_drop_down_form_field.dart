@@ -13,8 +13,10 @@ class CustomDropDownFormField extends StatefulWidget {
     this.focusedBorderColor = AppColors.mainColor,
     this.fillColor,
     this.borderRadius,
-    this.contentPadding =
-        const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+    this.contentPadding = const EdgeInsets.symmetric(
+      vertical: 16,
+      horizontal: 16,
+    ),
     this.onTap,
     this.prefixIcon,
     this.prefixIconConstraints,
@@ -87,15 +89,15 @@ class _CustomDropDownFormFieldState extends State<CustomDropDownFormField> {
   @override
   Widget build(BuildContext context) {
     InputBorder border({Color? color}) => OutlineInputBorder(
-          borderRadius: widget.borderRadius ?? BorderRadius.circular(5),
-          borderSide: BorderSide(color: color!),
-        );
+      borderRadius: widget.borderRadius ?? BorderRadius.circular(5),
+      borderSide: BorderSide(color: color!),
+    );
     TextStyle textStyle({required double fontSize, Color? color}) => TextStyle(
-          fontWeight: FontWeight.normal,
-          fontSize: MediaQuery.textScalerOf(context).scale(fontSize),
-          fontFamily: 'Almarai',
-          color: color,
-        );
+      fontWeight: FontWeight.normal,
+      fontSize: MediaQuery.textScalerOf(context).scale(fontSize),
+      fontFamily: 'Almarai',
+      color: color,
+    );
     return DropdownButtonFormField<Object?>(
       value: widget.value,
       onTap: widget.onTap,
@@ -104,24 +106,35 @@ class _CustomDropDownFormFieldState extends State<CustomDropDownFormField> {
       style: textStyle(fontSize: 14),
       decoration: InputDecoration(
         errorStyle: textStyle(
-            fontSize: widget.showErrorMessage ? widget.hintFontSize : 0),
+          fontSize: widget.showErrorMessage ? widget.hintFontSize : 0,
+        ),
         isDense: widget.isDense,
         hintText: widget.hintText,
         helperText: widget.helperText,
         hintStyle: textStyle(
-            fontSize: widget.hintFontSize, color: const Color(0xffd8d8d8)),
+          fontSize: widget.hintFontSize,
+          color: const Color(0xffd8d8d8),
+        ),
         filled: widget.fillColor != null ? true : false,
         fillColor: widget.fillColor,
         contentPadding: widget.contentPadding,
         labelText: widget.label,
         labelStyle: textStyle(
-            fontSize: widget.labelFontSize, color: const Color(0xffd8d8d8)),
+          fontSize: widget.labelFontSize,
+          color: const Color(0xffd8d8d8),
+        ),
         helperStyle: textStyle(
-            fontSize: widget.labelFontSize, color: const Color(0xffd8d8d8)),
-        floatingLabelStyle:
-            textStyle(fontSize: widget.labelFontSize + 2, color: widget.color),
+          fontSize: widget.labelFontSize,
+          color: const Color(0xffd8d8d8),
+        ),
+        floatingLabelStyle: textStyle(
+          fontSize: widget.labelFontSize + 2,
+          color: widget.color,
+        ),
         border: border(color: _isFocused ? AppColors.mainColor : widget.color),
-        enabledBorder: border(color: _isFocused ? AppColors.mainColor : widget.color),
+        enabledBorder: border(
+          color: _isFocused ? AppColors.mainColor : widget.color,
+        ),
         focusedBorder: border(color: widget.focusedBorderColor),
         errorBorder: border(color: Colors.red),
         suffixIconColor: widget.color,

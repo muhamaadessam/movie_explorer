@@ -3,6 +3,6 @@ class Assets {
   Assets._();
 
   static const String pngImagePlaceholder = 'assets/png/imagePlaceholder.png';
-  static const String pngImageUserPlaceholder = 'assets/png/imageUserPlaceholder.png';
-
+  static const String pngImageUserPlaceholder =
+      'assets/png/imageUserPlaceholder.png';
 }

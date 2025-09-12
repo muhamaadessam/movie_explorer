@@ -27,10 +27,12 @@ class ServicesLocator {
 
     /// Repository
     sl.registerLazySingleton<BaseMoviesRepository>(
-        () => MoviesRepository(sl()));
+      () => MoviesRepository(sl()),
+    );
 
     /// DATA SOURCE
     sl.registerLazySingleton<BaseMovieRemoteDataSource>(
-        () => MovieRemoteDataSource());
+      () => MovieRemoteDataSource(),
+    );
   }
 }

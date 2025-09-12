@@ -19,21 +19,19 @@ class MovieDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => sl<MovieDetailsBloc>()
-        ..add(GetMovieDetailsEvent(id))
-        ..add(GetMovieRecommendationEvent(id)),
+      create:
+          (context) =>
+              sl<MovieDetailsBloc>()
+                ..add(GetMovieDetailsEvent(id))
+                ..add(GetMovieRecommendationEvent(id)),
       lazy: false,
-      child: const Scaffold(
-        body: MovieDetailContent(),
-      ),
+      child: const Scaffold(body: MovieDetailContent()),
     );
   }
 }
 
 class MovieDetailContent extends StatelessWidget {
-  const MovieDetailContent({
-    Key? key,
-  }) : super(key: key);
+  const MovieDetailContent({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -41,9 +39,7 @@ class MovieDetailContent extends StatelessWidget {
       builder: (context, state) {
         switch (state.movieDetailsState) {
           case RequestState.loading:
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+            return const Center(child: CircularProgressIndicator());
           case RequestState.loaded:
             return CustomScrollView(
               key: const Key('movieDetailScrollView'),
@@ -74,7 +70,8 @@ class MovieDetailContent extends StatelessWidget {
                         child: CachedNetworkImage(
                           width: MediaQuery.of(context).size.width,
                           imageUrl: ApiConstance.imageUrl(
-                              state.movieDetail!.backdropPath),
+                            state.movieDetail!.backdropPath,
+                          ),
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -90,12 +87,14 @@ class MovieDetailContent extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(state.movieDetail!.title,
-                              style: GoogleFonts.poppins(
-                                fontSize: 23,
-                                fontWeight: FontWeight.w700,
-                                letterSpacing: 1.2,
-                              )),
+                          Text(
+                            state.movieDetail!.title,
+                            style: GoogleFonts.poppins(
+                              fontSize: 23,
+                              fontWeight: FontWeight.w700,
+                              letterSpacing: 1.2,
+                            ),
+                          ),
                           const SizedBox(height: 8.0),
                           Row(
                             children: [
@@ -238,45 +237,47 @@ class MovieDetailContent extends StatelessWidget {
 
   Widget _showRecommendations() {
     return BlocBuilder<MovieDetailsBloc, MovieDetailsState>(
-      builder: (context, state) => SliverGrid(
-        delegate: SliverChildBuilderDelegate(
-          (context, index) {
-            final recommendation = state.recommendation[index];
-            return FadeInUp(
-              from: 20,
-              duration: const Duration(milliseconds: 500),
-              child: ClipRRect(
-                borderRadius: const BorderRadius.all(Radius.circular(4.0)),
-                child: CachedNetworkImage(
-                  imageUrl: ApiConstance.imageUrl(recommendation.backdropPath!),
-                  placeholder: (context, url) => Shimmer.fromColors(
-                    baseColor: Colors.grey[850]!,
-                    highlightColor: Colors.grey[800]!,
-                    child: Container(
-                      height: 170.0,
-                      width: 120.0,
-                      decoration: BoxDecoration(
-                        color: Colors.black,
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
+      builder:
+          (context, state) => SliverGrid(
+            delegate: SliverChildBuilderDelegate((context, index) {
+              final recommendation = state.recommendation[index];
+              return FadeInUp(
+                from: 20,
+                duration: const Duration(milliseconds: 500),
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.all(Radius.circular(4.0)),
+                  child: CachedNetworkImage(
+                    imageUrl: ApiConstance.imageUrl(
+                      recommendation.backdropPath!,
                     ),
+                    placeholder:
+                        (context, url) => Shimmer.fromColors(
+                          baseColor: Colors.grey[850]!,
+                          highlightColor: Colors.grey[800]!,
+                          child: Container(
+                            height: 170.0,
+                            width: 120.0,
+                            decoration: BoxDecoration(
+                              color: Colors.black,
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                          ),
+                        ),
+                    errorWidget:
+                        (context, url, error) => const Icon(Icons.error),
+                    height: 180.0,
+                    fit: BoxFit.cover,
                   ),
-                  errorWidget: (context, url, error) => const Icon(Icons.error),
-                  height: 180.0,
-                  fit: BoxFit.cover,
                 ),
-              ),
-            );
-          },
-          childCount: state.recommendation.length,
-        ),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          mainAxisSpacing: 8.0,
-          crossAxisSpacing: 8.0,
-          childAspectRatio: 0.7,
-          crossAxisCount: 3,
-        ),
-      ),
+              );
+            }, childCount: state.recommendation.length),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              mainAxisSpacing: 8.0,
+              crossAxisSpacing: 8.0,
+              childAspectRatio: 0.7,
+              crossAxisCount: 3,
+            ),
+          ),
     );
   }
 }

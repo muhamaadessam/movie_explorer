@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
 class CustomShimmer extends StatelessWidget {
-  const CustomShimmer(
-      {super.key,
-      required this.width,
-      required this.height,
-      this.radius = 5,
-      this.circle = false});
+  const CustomShimmer({
+    super.key,
+    required this.width,
+    required this.height,
+    this.radius = 5,
+    this.circle = false,
+  });
 
   final double width;
   final double height;
@@ -22,9 +23,10 @@ class CustomShimmer extends StatelessWidget {
       direction: ShimmerDirection.rtl,
       child: Container(
         decoration: BoxDecoration(
-            shape: circle ? BoxShape.circle : BoxShape.rectangle,
-            borderRadius: !circle ? BorderRadius.circular(radius) : null,
-            color: Colors.white),
+          shape: circle ? BoxShape.circle : BoxShape.rectangle,
+          borderRadius: !circle ? BorderRadius.circular(radius) : null,
+          color: Colors.white,
+        ),
         width: width,
         height: height,
       ),

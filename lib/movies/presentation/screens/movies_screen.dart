@@ -18,10 +18,12 @@ class MoviesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (BuildContext context) => sl<MoviesBloc>()
-        ..add(GetNowPlayingMoviesEvent())
-        ..add(GetPopularMoviesEvent())
-        ..add(GetTopRatedMoviesEvent()),
+      create:
+          (BuildContext context) =>
+              sl<MoviesBloc>()
+                ..add(GetNowPlayingMoviesEvent())
+                ..add(GetPopularMoviesEvent())
+                ..add(GetTopRatedMoviesEvent()),
       child: BlocBuilder<MoviesBloc, MoviesState>(
         builder: (context, state) {
           return CustomScaffold(
@@ -55,15 +57,13 @@ class MoviesScreen extends StatelessWidget {
                               children: const [
                                 Text(
                                   AppString.seeMore,
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                  ),
+                                  style: TextStyle(color: Colors.white),
                                 ),
                                 Icon(
                                   Icons.arrow_forward_ios,
                                   size: 16.0,
                                   color: Colors.white,
-                                )
+                                ),
                               ],
                             ),
                           ),
@@ -73,12 +73,7 @@ class MoviesScreen extends StatelessWidget {
                   ),
                   const PopularComponent(),
                   Container(
-                    margin: const EdgeInsets.fromLTRB(
-                      16.0,
-                      24.0,
-                      16.0,
-                      8.0,
-                    ),
+                    margin: const EdgeInsets.fromLTRB(16.0, 24.0, 16.0, 8.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -101,15 +96,13 @@ class MoviesScreen extends StatelessWidget {
                               children: const [
                                 Text(
                                   AppString.seeMore,
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                  ),
+                                  style: TextStyle(color: Colors.white),
                                 ),
                                 Icon(
                                   Icons.arrow_forward_ios,
                                   size: 16.0,
                                   color: Colors.white,
-                                )
+                                ),
                               ],
                             ),
                           ),

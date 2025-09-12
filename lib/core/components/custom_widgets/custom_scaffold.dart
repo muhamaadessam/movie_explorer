@@ -62,8 +62,9 @@ class _CustomScaffoldState extends State<CustomScaffold> {
   void initState() {
     super.initState();
     initConnectivity();
-    _connectivitySubscription =
-        _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+    _connectivitySubscription = _connectivity.onConnectivityChanged.listen(
+      _updateConnectionStatus,
+    );
   }
 
   @override
@@ -76,42 +77,44 @@ class _CustomScaffoldState extends State<CustomScaffold> {
   Widget build(BuildContext context) {
     return Directionality(
       textDirection: TextDirection.rtl,
-      child: !isDeviceConnected
-          ? Scaffold(
-              body: FutureBuilder(
-                builder: (context, snap) {
-                  if (snap.connectionState == ConnectionState.waiting) {
-                    return Container();
-                  } else if (snap.connectionState == ConnectionState.done) {
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        const Center(
-                          child: TextTitle(
-                            'الجهاز غير متصل بالانترنت',
-                            color: Color(0xffc2c2c2),
-                            fontWeight: FontWeight.bold,
+      child:
+          !isDeviceConnected
+              ? Scaffold(
+                body: FutureBuilder(
+                  builder: (context, snap) {
+                    if (snap.connectionState == ConnectionState.waiting) {
+                      return Container();
+                    } else if (snap.connectionState == ConnectionState.done) {
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          const Center(
+                            child: TextTitle(
+                              'الجهاز غير متصل بالانترنت',
+                              color: Color(0xffc2c2c2),
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                      ],
-                    );
-                  } else {
-                    return const CircularProgressIndicator();
-                  }
-                },
-                future: Future.delayed(const Duration(seconds: 1)),
+                        ],
+                      );
+                    } else {
+                      return const CircularProgressIndicator();
+                    }
+                  },
+                  future: Future.delayed(const Duration(seconds: 1)),
+                ),
+              )
+              : Scaffold(
+                backgroundColor: widget.backgroundColor,
+                floatingActionButtonLocation:
+                    widget.floatingActionButtonLocation,
+                floatingActionButton: widget.floatingActionButton,
+                drawer: widget.drawer,
+                bottomNavigationBar: widget.bottomNavigationBar,
+                body: widget.body,
+                appBar: widget.appBar,
               ),
-            )
-          : Scaffold(
-              backgroundColor: widget.backgroundColor,
-              floatingActionButtonLocation: widget.floatingActionButtonLocation,
-              floatingActionButton: widget.floatingActionButton,
-              drawer: widget.drawer,
-              bottomNavigationBar: widget.bottomNavigationBar,
-              body: widget.body,
-              appBar: widget.appBar,
-            ),
     );
   }
 }

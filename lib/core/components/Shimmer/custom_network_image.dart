@@ -31,14 +31,13 @@ class CustomNetworkImage extends StatelessWidget {
       alignment: alignment,
       loadingBuilder: (context, child, loadingProgress) {
         if (loadingProgress == null) return child;
-        return CustomShimmer(
-          width: width ?? 0,
-          height: height ?? 0,
-        );
+        return CustomShimmer(width: width ?? 0, height: height ?? 0);
       },
       errorBuilder: (context, error, stackTrace) {
         return Image.asset(
-          isUserImage ? Assets.pngImageUserPlaceholder : Assets.pngImagePlaceholder,
+          isUserImage
+              ? Assets.pngImageUserPlaceholder
+              : Assets.pngImagePlaceholder,
           width: width,
           height: height,
           fit: fit,

@@ -1,9 +1,7 @@
-import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
-import '../../Error/failure.dart';
 import '../Local/cache_helper.dart';
 import 'api_constance.dart';
 
@@ -12,11 +10,12 @@ class DioHelper {
 
   static init() {
     dio = Dio(
-      BaseOptions(
-        baseUrl: ApiConstance.baseUrl,
-        receiveDataWhenStatusError: true,
-      ),
-    )..interceptors.addAll([
+        BaseOptions(
+          baseUrl: ApiConstance.baseUrl,
+          receiveDataWhenStatusError: true,
+        ),
+      )
+      ..interceptors.addAll([
         if (kDebugMode)
           PrettyDioLogger(
             requestHeader: true,
@@ -26,7 +25,7 @@ class DioHelper {
             error: true,
             compact: true,
             maxWidth: 89,
-          )
+          ),
       ]);
   }
 
@@ -40,10 +39,7 @@ class DioHelper {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ${CacheHelper.get(key: 'token')}',
     };
-    final response = await dio!.get(
-      endPoint,
-      queryParameters: query,
-    );
+    final response = await dio!.get(endPoint, queryParameters: query);
     return response;
   }
 
@@ -56,10 +52,7 @@ class DioHelper {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ${CacheHelper.get(key: 'token')}',
     };
-    final response = await dio!.patch(
-      '$endPoint',
-      data: data,
-    );
+    final response = await dio!.patch('$endPoint', data: data);
     return response;
   }
 

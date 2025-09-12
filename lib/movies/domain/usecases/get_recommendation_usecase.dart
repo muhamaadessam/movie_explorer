@@ -13,7 +13,8 @@ class GetRecommendationUseCase
 
   @override
   Future<Either<Failure, List<Recommendation>>> call(
-      RecommendationParameters parameters) async {
+    RecommendationParameters parameters,
+  ) async {
     return await baseMoviesRepository.getRecommendation(parameters);
   }
 }

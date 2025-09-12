@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:movie_explorer/core/error/exceptions.dart';
 import 'package:movie_explorer/core/network/Remote/api_constance.dart';
 import 'package:movie_explorer/core/network/Remote/dio_helper.dart';
