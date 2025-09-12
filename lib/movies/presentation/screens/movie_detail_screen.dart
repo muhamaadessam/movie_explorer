@@ -2,40 +2,44 @@ import 'package:animate_do/animate_do.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:movie_explorer/core/network/Remote/api_constance.dart';
 import 'package:movie_explorer/core/services/services_locator.dart';
-import 'package:movie_explorer/core/utils/app_string.dart';
 import 'package:movie_explorer/core/utils/enums.dart';
-import 'package:movie_explorer/movies/domain/entities/genres.dart';
-import 'package:movie_explorer/movies/presentation/controller/movie_details_bloc.dart';
-import 'package:shimmer/shimmer.dart';
+import 'package:movie_explorer/movies/presentation/controller/movie_details/movie_details_cubit.dart';
+
+import '../../../core/components/custom_widgets/custom_scaffold.dart';
+import '../../../core/utils/app_colors.dart';
+import '../../../core/utils/text_styels.dart';
+import '../../data/models/movie_model.dart';
+import '../controller/favorites/favorites_cubit.dart';
 
 class MovieDetailScreen extends StatelessWidget {
   final int id;
+  final MovieModel movie;
 
-  const MovieDetailScreen({super.key, required this.id});
+  const MovieDetailScreen({super.key, required this.id, required this.movie});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create:
-          (context) =>
-              sl<MovieDetailsBloc>()
-                ..add(GetMovieDetailsEvent(id))
-                ..add(GetMovieRecommendationEvent(id)),
+      create: (context) => sl<MovieDetailsCubit>()..getMovieDetails(id),
       lazy: false,
-      child: const Scaffold(body: MovieDetailContent()),
+      child: BlocProvider.value(
+        value: sl<FavoritesCubit>()..loadFavorites(),
+        child: CustomScaffold(body: MovieDetailContent(movie: movie)),
+      ),
     );
   }
 }
 
 class MovieDetailContent extends StatelessWidget {
-  const MovieDetailContent({super.key});
+  const MovieDetailContent({super.key, required this.movie});
+
+  final MovieModel movie;
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<MovieDetailsBloc, MovieDetailsState>(
+    return BlocBuilder<MovieDetailsCubit, MovieDetailsState>(
       builder: (context, state) {
         switch (state.movieDetailsState) {
           case RequestState.loading:
@@ -46,7 +50,7 @@ class MovieDetailContent extends StatelessWidget {
               slivers: [
                 SliverAppBar(
                   pinned: true,
-                  expandedHeight: 250.0,
+                  expandedHeight: 500.0,
                   flexibleSpace: FlexibleSpaceBar(
                     background: FadeIn(
                       duration: const Duration(milliseconds: 500),
@@ -70,7 +74,7 @@ class MovieDetailContent extends StatelessWidget {
                         child: CachedNetworkImage(
                           width: MediaQuery.of(context).size.width,
                           imageUrl: ApiConstance.imageUrl(
-                            state.movieDetail!.backdropPath,
+                            state.movieDetail!.posterImage,
                           ),
                           fit: BoxFit.cover,
                         ),
@@ -87,13 +91,32 @@ class MovieDetailContent extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            state.movieDetail!.title,
-                            style: GoogleFonts.poppins(
-                              fontSize: 23,
-                              fontWeight: FontWeight.w700,
-                              letterSpacing: 1.2,
-                            ),
+                          Row(
+                            children: [
+                              TextTitle(
+                                state.movieDetail!.title,
+                                color: AppColors.getTextColor(true),
+                              ),
+                              BlocBuilder<FavoritesCubit, FavoritesState>(
+                                builder: (context, state) {
+                                  final cubit = context.read<FavoritesCubit>();
+                                  return IconButton(
+                                    onPressed: () {
+                                      context
+                                          .read<FavoritesCubit>()
+                                          .toggleFavorite(movie);
+                                    },
+                                    icon: Icon(
+                                      Icons.favorite,
+                                      color:
+                                          cubit.isFavorite(movie.id)
+                                              ? Colors.red
+                                              : AppColors.getTextColor(true),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ],
                           ),
                           const SizedBox(height: 8.0),
                           Row(
@@ -107,12 +130,9 @@ class MovieDetailContent extends StatelessWidget {
                                   color: Colors.grey[800],
                                   borderRadius: BorderRadius.circular(4.0),
                                 ),
-                                child: Text(
+                                child: TextBody12(
                                   state.movieDetail!.releaseDate.split('-')[0],
-                                  style: const TextStyle(
-                                    fontSize: 16.0,
-                                    fontWeight: FontWeight.w500,
-                                  ),
+                                  color: AppColors.getTextColor(true),
                                 ),
                               ),
                               const SizedBox(width: 16.0),
@@ -125,7 +145,7 @@ class MovieDetailContent extends StatelessWidget {
                                   ),
                                   const SizedBox(width: 4.0),
                                   Text(
-                                    (state.movieDetail!.voteAverage / 2)
+                                    state.movieDetail!.voteAverage
                                         .toStringAsFixed(1),
                                     style: const TextStyle(
                                       fontSize: 16.0,
@@ -133,26 +153,7 @@ class MovieDetailContent extends StatelessWidget {
                                       letterSpacing: 1.2,
                                     ),
                                   ),
-                                  const SizedBox(width: 4.0),
-                                  Text(
-                                    '(${state.movieDetail!.voteAverage})',
-                                    style: const TextStyle(
-                                      fontSize: 1.0,
-                                      fontWeight: FontWeight.w500,
-                                      letterSpacing: 1.2,
-                                    ),
-                                  ),
                                 ],
-                              ),
-                              const SizedBox(width: 16.0),
-                              Text(
-                                _showDuration(state.movieDetail!.runtime),
-                                style: const TextStyle(
-                                  color: Colors.white70,
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.w500,
-                                  letterSpacing: 1.2,
-                                ),
                               ),
                             ],
                           ),
@@ -165,119 +166,19 @@ class MovieDetailContent extends StatelessWidget {
                               letterSpacing: 1.2,
                             ),
                           ),
-                          const SizedBox(height: 8.0),
-                          Text(
-                            '${AppString.genres}: ${_showGenres(state.movieDetail!.genres)}',
-                            style: const TextStyle(
-                              color: Colors.white70,
-                              fontSize: 12.0,
-                              fontWeight: FontWeight.w500,
-                              letterSpacing: 1.2,
-                            ),
-                          ),
                         ],
                       ),
                     ),
                   ),
                 ),
-                SliverPadding(
-                  padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 24.0),
-                  sliver: SliverToBoxAdapter(
-                    child: FadeInUp(
-                      from: 20,
-                      duration: const Duration(milliseconds: 500),
-                      child: const Text(
-                        AppString.moreLikeThis,
-                        style: TextStyle(
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.w500,
-                          letterSpacing: 1.2,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                // Tab(text: 'More like this'.toUpperCase()),
-                SliverPadding(
-                  padding: const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 24.0),
-                  sliver: _showRecommendations(),
-                ),
               ],
             );
           case RequestState.error:
             return Center(child: Text(state.movieDetailsMessage));
+          case RequestState.init:
+            return const Center(child: Text("Type to search movies"));
         }
       },
-    );
-  }
-
-  String _showGenres(List<Genres> genres) {
-    String result = '';
-    for (var genre in genres) {
-      result += '${genre.name}, ';
-    }
-
-    if (result.isEmpty) {
-      return result;
-    }
-
-    return result.substring(0, result.length - 2);
-  }
-
-  String _showDuration(int runtime) {
-    final int hours = runtime ~/ 60;
-    final int minutes = runtime % 60;
-
-    if (hours > 0) {
-      return '${hours}h ${minutes}m';
-    } else {
-      return '${minutes}m';
-    }
-  }
-
-  Widget _showRecommendations() {
-    return BlocBuilder<MovieDetailsBloc, MovieDetailsState>(
-      builder:
-          (context, state) => SliverGrid(
-            delegate: SliverChildBuilderDelegate((context, index) {
-              final recommendation = state.recommendation[index];
-              return FadeInUp(
-                from: 20,
-                duration: const Duration(milliseconds: 500),
-                child: ClipRRect(
-                  borderRadius: const BorderRadius.all(Radius.circular(4.0)),
-                  child: CachedNetworkImage(
-                    imageUrl: ApiConstance.imageUrl(
-                      recommendation.backdropPath!,
-                    ),
-                    placeholder:
-                        (context, url) => Shimmer.fromColors(
-                          baseColor: Colors.grey[850]!,
-                          highlightColor: Colors.grey[800]!,
-                          child: Container(
-                            height: 170.0,
-                            width: 120.0,
-                            decoration: BoxDecoration(
-                              color: Colors.black,
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),
-                          ),
-                        ),
-                    errorWidget:
-                        (context, url, error) => const Icon(Icons.error),
-                    height: 180.0,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              );
-            }, childCount: state.recommendation.length),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              mainAxisSpacing: 8.0,
-              crossAxisSpacing: 8.0,
-              childAspectRatio: 0.7,
-              crossAxisCount: 3,
-            ),
-          ),
     );
   }
 }

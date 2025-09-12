@@ -3,27 +3,30 @@ import 'package:movie_explorer/movies/data/datasource/movie_remote_data_source.d
 import 'package:movie_explorer/movies/data/repository/movies_repository.dart';
 import 'package:movie_explorer/movies/domain/repository/base_movies_repository.dart';
 import 'package:movie_explorer/movies/domain/usecases/get_movie_details_usecase.dart';
-import 'package:movie_explorer/movies/domain/usecases/get_now_playing_movies_usecase.dart';
 import 'package:movie_explorer/movies/domain/usecases/get_popular_movies_usecase.dart';
-import 'package:movie_explorer/movies/domain/usecases/get_recommendation_usecase.dart';
-import 'package:movie_explorer/movies/domain/usecases/get_top_rated_movies_usecase.dart';
-import 'package:movie_explorer/movies/presentation/controller/movie_details_bloc.dart';
-import 'package:movie_explorer/movies/presentation/controller/movies_bloc.dart';
+import 'package:movie_explorer/movies/presentation/controller/movie_details/movie_details_cubit.dart';
+import 'package:movie_explorer/movies/presentation/controller/movies/movies_cubit.dart';
+
+import '../../movies/domain/usecases/search_movies_usecase.dart';
+import '../../movies/presentation/controller/favorites/favorites_cubit.dart';
+import '../../movies/presentation/controller/search/search_cubit.dart';
 
 final sl = GetIt.instance;
 
 class ServicesLocator {
   void init() {
+    print("Initializing ServicesLocator...");
+
     /// Bloc
-    sl.registerFactory(() => MoviesBloc(sl(), sl(), sl()));
-    sl.registerFactory(() => MovieDetailsBloc(sl(), sl()));
+    sl.registerFactory(() => MoviesCubit(sl()));
+    sl.registerFactory(() => MovieDetailsCubit(sl()));
+    sl.registerFactory(() => FavoritesCubit());
+    sl.registerFactory(() => SearchCubit(sl()));
 
     /// Use Cases
-    sl.registerLazySingleton(() => GetNowPlayingMoviesUseCase(sl()));
     sl.registerLazySingleton(() => GetPopularMoviesUseCase(sl()));
-    sl.registerLazySingleton(() => GetTopRatedMoviesUseCase(sl()));
     sl.registerLazySingleton(() => GetMovieDetailsUseCase(sl()));
-    sl.registerLazySingleton(() => GetRecommendationUseCase(sl()));
+    sl.registerLazySingleton(() => SearchMoviesUseCase(sl()));
 
     /// Repository
     sl.registerLazySingleton<BaseMoviesRepository>(

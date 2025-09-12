@@ -5,25 +5,25 @@ import 'package:movie_explorer/core/usecase/base_usecase.dart';
 import 'package:movie_explorer/movies/domain/entities/movie.dart';
 import 'package:movie_explorer/movies/domain/repository/base_movies_repository.dart';
 
-class GetPopularMoviesUseCase
-    extends BaseUseCase<List<Movie>, GetPopularMoviesParameters> {
+class SearchMoviesUseCase
+    extends BaseUseCase<List<Movie>, SearchMoviesParameters> {
   final BaseMoviesRepository baseMoviesRepository;
 
-  GetPopularMoviesUseCase(this.baseMoviesRepository);
+  SearchMoviesUseCase(this.baseMoviesRepository);
 
   @override
   Future<Either<Failure, List<Movie>>> call(
-    GetPopularMoviesParameters parameters,
+    SearchMoviesParameters parameters,
   ) async {
-    return await baseMoviesRepository.getPopularMovies(parameters);
+    return await baseMoviesRepository.searchMovies(parameters);
   }
 }
 
-class GetPopularMoviesParameters extends Equatable {
-  final int page;
+class SearchMoviesParameters extends Equatable {
+  final String query;
 
-  const GetPopularMoviesParameters({required this.page});
+  const SearchMoviesParameters({required this.query});
 
   @override
-  List<Object?> get props => [page];
+  List<Object?> get props => [query];
 }
