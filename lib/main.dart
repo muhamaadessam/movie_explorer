@@ -37,6 +37,7 @@ class MyApp extends StatelessWidget {
         builder: (context, state) {
           return MaterialApp(
             title: 'Movie Explorer',
+            debugShowCheckedModeBanner: false,
             theme: state.themeData,
             themeMode: context.isDarkMode ? ThemeMode.dark : ThemeMode.light,
             home: const MoviesScreen(),
