@@ -6,7 +6,8 @@ class Movie extends Equatable {
   final String posterImage;
   final String overview;
   final double voteAverage;
-  final String releaseDate;
+  final String? releaseDate;
+  final int totalPages;
 
   const Movie({
     required this.id,
@@ -15,6 +16,7 @@ class Movie extends Equatable {
     required this.overview,
     required this.voteAverage,
     required this.releaseDate,
+    required this.totalPages,
   });
 
   @override
@@ -24,6 +26,7 @@ class Movie extends Equatable {
     posterImage,
     overview,
     voteAverage,
-    releaseDate,
+    releaseDate!,
+    totalPages,
   ];
 }

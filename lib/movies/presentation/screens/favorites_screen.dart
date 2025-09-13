@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_explorer/core/services/services_locator.dart';
 
 import '../../../core/components/custom_widgets/custom_scaffold.dart';
+import '../../../core/components/custom_widgets/error_screen.dart';
 import '../components/movie_card.dart';
 import '../controller/favorites/favorites_cubit.dart';
 
@@ -20,12 +21,20 @@ class FavoritesScreen extends StatelessWidget {
             if (state.status == FavoritesStatus.loading) {
               return const Center(child: CircularProgressIndicator());
             }
+            if (state.status == FavoritesStatus.failure) {
+              return ErrorScreen(
+                message: state.favoritesMessage,
+                onRetry: () {
+                  context.read<FavoritesCubit>().loadFavorites();
+                },
+              );
+            }
             if (state.favorites.isEmpty) {
               return const Center(child: Text("No favorites yet"));
             }
             return GridView.builder(
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
+                crossAxisCount: 2,
                 mainAxisSpacing: 8.0,
                 crossAxisSpacing: 8.0,
                 childAspectRatio: 0.7,

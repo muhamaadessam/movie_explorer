@@ -7,25 +7,23 @@ import 'package:movie_explorer/movies/domain/usecases/get_movie_details_usecase.
 import 'package:movie_explorer/movies/domain/usecases/search_movies_usecase.dart';
 
 abstract class BaseMovieRemoteDataSource {
-  Future<List<MovieModel>> getPopularMovies(parameters);
+  Future<ResponseModel> getPopularMovies(parameters);
 
   Future<MovieModel> getMovieDetails(MovieDetailsParameters parameters);
 
-  Future<List<MovieModel>> searchMovies(SearchMoviesParameters parameters);
+  Future<ResponseModel> searchMovies(SearchMoviesParameters parameters);
 }
 
 class MovieRemoteDataSource extends BaseMovieRemoteDataSource {
   @override
-  Future<List<MovieModel>> getPopularMovies(parameters) async {
+  Future<ResponseModel> getPopularMovies(parameters) async {
     final response = await DioHelper.getData(
       endPoint: ApiConstance.popularMoviesPath,
       query: {"page": parameters.page},
     );
 
     if (response.statusCode == 200) {
-      return List<MovieModel>.from(
-        (response.data["results"] as List).map((e) => MovieModel.fromJson(e)),
-      );
+      return ResponseModel.fromJson(response.data);
     } else {
       throw ServerException(
         errorMessageModel: ErrorMessageModel.fromJson(response.data),
@@ -49,18 +47,14 @@ class MovieRemoteDataSource extends BaseMovieRemoteDataSource {
   }
 
   @override
-  Future<List<MovieModel>> searchMovies(
-    SearchMoviesParameters parameters,
-  ) async {
+  Future<ResponseModel> searchMovies(SearchMoviesParameters parameters) async {
     final response = await DioHelper.getData(
       endPoint: ApiConstance.searchMoviesPath,
-      query: {"query": parameters.query},
+      query: {"query": parameters.query, "page": parameters.page},
     );
 
     if (response.statusCode == 200) {
-      return List<MovieModel>.from(
-        (response.data["results"] as List).map((e) => MovieModel.fromJson(e)),
-      );
+      return ResponseModel.fromJson(response.data);
     } else {
       throw ServerException(
         errorMessageModel: ErrorMessageModel.fromJson(response.data),

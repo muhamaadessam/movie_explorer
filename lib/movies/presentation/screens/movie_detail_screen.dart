@@ -8,7 +8,8 @@ import 'package:movie_explorer/core/utils/enums.dart';
 import 'package:movie_explorer/movies/presentation/controller/movie_details/movie_details_cubit.dart';
 
 import '../../../core/components/custom_widgets/custom_scaffold.dart';
-import '../../../core/utils/app_colors.dart';
+import '../../../core/components/custom_widgets/error_screen.dart';
+import '../../../core/themes/theme_cubit/app_theme_cubit.dart';
 import '../../../core/utils/text_styels.dart';
 import '../../data/models/movie_model.dart';
 import '../controller/favorites/favorites_cubit.dart';
@@ -24,18 +25,16 @@ class MovieDetailScreen extends StatelessWidget {
     return BlocProvider(
       create: (context) => sl<MovieDetailsCubit>()..getMovieDetails(id),
       lazy: false,
-      child: BlocProvider.value(
-        value: sl<FavoritesCubit>()..loadFavorites(),
-        child: CustomScaffold(body: MovieDetailContent(movie: movie)),
-      ),
+      child: CustomScaffold(body: MovieDetailContent(movie: movie, id: id)),
     );
   }
 }
 
 class MovieDetailContent extends StatelessWidget {
-  const MovieDetailContent({super.key, required this.movie});
+  const MovieDetailContent({super.key, required this.movie, required this.id});
 
   final MovieModel movie;
+  final int id;
 
   @override
   Widget build(BuildContext context) {
@@ -95,7 +94,7 @@ class MovieDetailContent extends StatelessWidget {
                             children: [
                               TextTitle(
                                 state.movieDetail!.title,
-                                color: AppColors.getTextColor(true),
+                                // color: AppColors.getTextColor(true),
                               ),
                               BlocBuilder<FavoritesCubit, FavoritesState>(
                                 builder: (context, state) {
@@ -111,7 +110,7 @@ class MovieDetailContent extends StatelessWidget {
                                       color:
                                           cubit.isFavorite(movie.id)
                                               ? Colors.red
-                                              : AppColors.getTextColor(true),
+                                              : null,
                                     ),
                                   );
                                 },
@@ -121,20 +120,24 @@ class MovieDetailContent extends StatelessWidget {
                           const SizedBox(height: 8.0),
                           Row(
                             children: [
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 2.0,
-                                  horizontal: 8.0,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: Colors.grey[800],
-                                  borderRadius: BorderRadius.circular(4.0),
-                                ),
-                                child: TextBody12(
-                                  state.movieDetail!.releaseDate.split('-')[0],
-                                  color: AppColors.getTextColor(true),
-                                ),
-                              ),
+                              if (state.movieDetail!.releaseDate != null)
+                                if (movie.releaseDate!.isNotEmpty)
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      vertical: 2.0,
+                                      horizontal: 8.0,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: context.read<AppThemeCubit>().containerColor,
+                                      borderRadius: BorderRadius.circular(4.0),
+                                    ),
+                                    child: TextBody12(
+                                      state.movieDetail!.releaseDate!.split(
+                                        '-',
+                                      )[0],
+                                      // color: AppColors.getTextColor(true),
+                                    ),
+                                  ),
                               const SizedBox(width: 16.0),
                               Row(
                                 children: [
@@ -174,7 +177,11 @@ class MovieDetailContent extends StatelessWidget {
               ],
             );
           case RequestState.error:
-            return Center(child: Text(state.movieDetailsMessage));
+            return ErrorScreen(
+              message: state.movieDetailsMessage,
+              onRetry:
+                  () => context.read<MovieDetailsCubit>().getMovieDetails(id),
+            );
           case RequestState.init:
             return const Center(child: Text("Type to search movies"));
         }

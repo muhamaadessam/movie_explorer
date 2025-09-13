@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_explorer/core/utils/enums.dart';
 
+import '../../../core/components/custom_widgets/error_screen.dart';
 import '../controller/movies/movies_cubit.dart';
 import 'movie_card.dart';
 import 'movie_card_shimmer.dart';
@@ -31,6 +32,12 @@ class _PopularComponentState extends State<PopularComponent> {
   }
 
   @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocBuilder<MoviesCubit, MoviesState>(
       buildWhen:
@@ -39,7 +46,7 @@ class _PopularComponentState extends State<PopularComponent> {
         if (state.popularMovies.isEmpty) {
           return GridView.builder(
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
+              crossAxisCount: 2,
               mainAxisSpacing: 8.0,
               crossAxisSpacing: 8.0,
               childAspectRatio: 0.7,
@@ -63,7 +70,7 @@ class _PopularComponentState extends State<PopularComponent> {
               duration: const Duration(milliseconds: 500),
               child: GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
+                  crossAxisCount: 2,
                   mainAxisSpacing: 8.0,
                   crossAxisSpacing: 8.0,
                   childAspectRatio: 0.7,
@@ -89,9 +96,9 @@ class _PopularComponentState extends State<PopularComponent> {
               ),
             );
           case RequestState.error:
-            return SizedBox(
-              height: 170.0,
-              child: Center(child: Text(state.popularMessage)),
+            return ErrorScreen(
+              message: state.popularMessage,
+              onRetry: () => context.read<MoviesCubit>().getPopularMovies(),
             );
           case RequestState.init:
             return const Center(child: Text("Popular movies"));

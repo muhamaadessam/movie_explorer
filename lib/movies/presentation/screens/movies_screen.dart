@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movie_explorer/core/extensions/context_extension.dart';
 import 'package:movie_explorer/core/services/services_locator.dart';
-import 'package:movie_explorer/core/utils/app_string.dart';
+import 'package:movie_explorer/core/themes/theme_cubit/app_theme_cubit.dart';
 import 'package:movie_explorer/movies/presentation/components/popular_component.dart';
 import 'package:movie_explorer/movies/presentation/controller/movies/movies_cubit.dart';
 import 'package:movie_explorer/movies/presentation/screens/search_screen.dart';
@@ -15,11 +16,24 @@ class MoviesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (BuildContext context) => sl<MoviesCubit>()..getPopularMovies(),
+      create: (BuildContext context) =>
+      sl<MoviesCubit>()
+        ..getPopularMovies(),
       child: CustomScaffold(
         appBar: AppBar(
-          title: const Text(AppString.appName),
+          title: const Text('Movie Explorer'),
           actions: [
+            BlocBuilder<AppThemeCubit, AppThemeState>(
+              builder: (context, state) {
+                final themeCubit = context.read<AppThemeCubit>();
+                return IconButton(
+                  icon: Icon(
+                    themeCubit.isDark ? Icons.light_mode : Icons.dark_mode,
+                  ),
+                  onPressed: () => themeCubit.toggleTheme(),
+                );
+              },
+            ),
             IconButton(
               icon: Icon(Icons.favorite),
               onPressed: () {

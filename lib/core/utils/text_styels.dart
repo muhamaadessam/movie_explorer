@@ -8,14 +8,14 @@ class TextTitle extends StatelessWidget {
     this.fontWeight = FontWeight.bold,
     this.fontSize = 16,
     this.maxLines = 1,
-    this.color = Colors.black,
+    this.color,
   });
 
   final String text;
   final FontWeight fontWeight;
   final double fontSize;
   final int maxLines;
-  final Color color;
+  final Color? color;
   final TextAlign? textAlign;
 
   @override
@@ -43,13 +43,13 @@ class TextBody14 extends StatelessWidget {
     this.fontWeight = FontWeight.normal,
     this.fontSize = 14,
     this.maxLines = 1,
-    this.color = Colors.black,
+    this.color,
   });
 
   final String text;
   final FontWeight fontWeight;
   final double fontSize;
-  final Color color;
+  final Color? color;
   final TextAlign? textAlign;
   final int maxLines;
 
@@ -77,14 +77,14 @@ class TextBody12 extends StatelessWidget {
     this.textAlign,
     this.fontWeight = FontWeight.normal,
     this.fontSize = 12,
-    this.color = Colors.black,
+    this.color,
     this.maxLines = 1,
   });
 
   final String text;
   final FontWeight fontWeight;
   final double fontSize;
-  final Color color;
+  final Color? color;
   final TextAlign? textAlign;
   final int maxLines;
 
@@ -112,14 +112,14 @@ class TextDescription extends StatelessWidget {
     this.textAlign,
     this.fontWeight = FontWeight.normal,
     this.fontSize = 10,
-    this.color = Colors.black,
+    this.color,
     this.maxLines = 1,
   });
 
   final String text;
   final FontWeight fontWeight;
   final double fontSize;
-  final Color color;
+  final Color? color;
   final TextAlign? textAlign;
   final int maxLines;
 
@@ -147,14 +147,14 @@ class TextLink extends StatelessWidget {
     this.textAlign,
     this.fontWeight = FontWeight.normal,
     this.fontSize = 14,
-    this.color = Colors.black,
+    this.color,
     this.onTap,
   });
 
   final String text;
   final FontWeight fontWeight;
   final double fontSize;
-  final Color color;
+  final Color? color;
   final TextAlign? textAlign;
   final void Function()? onTap;
 

@@ -48,8 +48,9 @@ dependencies:
   pretty_dio_logger: ^1.4.0
   shared_preferences: ^2.5.3
   internet_connection_checker: ^1.0.0+1
-  connectivity_plus: ^5.0.2
-  infinite_scroll_pagination: ^5.1.1
+  connectivity_plus: ^6.0.3
+  flutter_native_splash: ^2.4.1
+  flutter_launcher_icons: ^0.14.3
 
 dev_dependencies:
   flutter_test:
@@ -62,8 +63,19 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
 
-# For information on the generic Dart part of this file, see the
-# following page: https://dart.dev/tools/pub/pubspec
+
+flutter_native_splash:
+  android: true
+  ios: true
+  color: "#FFFFFF"
+  color_dark: "#000000"
+  image: "assets/png/logo.png"
+
+  android_12:
+    color: "#FFFFFF"
+    color_dark: "#000000"
+    image: "assets/png/logo.png"
+
 
 # The following section is specific to Flutter packages.
 flutter:

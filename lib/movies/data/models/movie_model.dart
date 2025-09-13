@@ -10,6 +10,7 @@ class MovieModel extends Movie {
     required super.overview,
     required super.voteAverage,
     required super.releaseDate,
+    required super.totalPages,
   });
 
   factory MovieModel.fromJson(Map<String, dynamic> json) => MovieModel(
@@ -19,6 +20,7 @@ class MovieModel extends Movie {
     overview: json["overview"] ?? '',
     voteAverage: json["vote_average"].toDouble(),
     releaseDate: json["release_date"],
+    totalPages: json["total_pages"] ?? 0,
   );
 
   Map<String, dynamic> toJson() => {
@@ -28,6 +30,7 @@ class MovieModel extends Movie {
     "overview": overview,
     "vote_average": voteAverage,
     "release_date": releaseDate,
+    "total_pages": totalPages,
   };
 
   /// For storing in SharedPreferences as String

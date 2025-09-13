@@ -5,7 +5,6 @@ import 'package:movie_explorer/movies/presentation/controller/favorites/favorite
 
 import '../../../core/components/Shimmer/shimmer_widget.dart';
 import '../../../core/network/Remote/api_constance.dart';
-import '../../../core/utils/app_colors.dart';
 import '../../../core/utils/text_styels.dart';
 import '../../../res/assets.dart';
 import '../../data/models/movie_model.dart';
@@ -22,7 +21,7 @@ class MovieCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.mainColor,
+        // color: AppColors.mainColor,
         borderRadius: BorderRadius.circular(12.0),
       ),
       clipBehavior: Clip.antiAlias,
@@ -77,29 +76,29 @@ class MovieCard extends StatelessWidget {
               right: 0,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  TextBody14(movie.title, color: AppColors.getTextColor(true)),
-                ],
+                children: [TextBody14(movie.title, color: Colors.white)],
               ),
             ),
-            Positioned(
-              top: 10,
-              left: 5,
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 2.0,
-                  horizontal: 4.0,
+            if (movie.releaseDate != null)
+              if (movie.releaseDate!.isNotEmpty)
+                Positioned(
+                  top: 10,
+                  left: 5,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 2.0,
+                      horizontal: 4.0,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.red[800],
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: TextBody12(
+                      movie.releaseDate!.split('-')[0],
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
-                decoration: BoxDecoration(
-                  color: Colors.red[800],
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                child: TextBody12(
-                  movie.releaseDate.split('-')[0],
-                  color: AppColors.darkText,
-                ),
-              ),
-            ),
             if (fromFavorites)
               BlocBuilder<FavoritesCubit, FavoritesState>(
                 builder: (context, state) {

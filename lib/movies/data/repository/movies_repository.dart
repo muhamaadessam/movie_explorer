@@ -13,7 +13,7 @@ class MoviesRepository extends BaseMoviesRepository {
   MoviesRepository(this.baseMovieRemoteDataSource);
 
   @override
-  Future<Either<Failure, List<Movie>>> getPopularMovies(parameters) async {
+  Future<Either<Failure, ResponseEntity>> getPopularMovies(parameters) async {
     final result = await baseMovieRemoteDataSource.getPopularMovies(parameters);
     try {
       return Right(result);
@@ -35,7 +35,7 @@ class MoviesRepository extends BaseMoviesRepository {
   }
 
   @override
-  Future<Either<Failure, List<Movie>>> searchMovies(
+  Future<Either<Failure, ResponseEntity>> searchMovies(
     SearchMoviesParameters parameters,
   ) async {
     final result = await baseMovieRemoteDataSource.searchMovies(parameters);

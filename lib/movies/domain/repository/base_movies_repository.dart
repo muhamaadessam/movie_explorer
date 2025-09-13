@@ -5,13 +5,13 @@ import 'package:movie_explorer/movies/domain/usecases/get_movie_details_usecase.
 import 'package:movie_explorer/movies/domain/usecases/search_movies_usecase.dart';
 
 abstract class BaseMoviesRepository {
-  Future<Either<Failure, List<Movie>>> getPopularMovies(parameters);
+  Future<Either<Failure, ResponseEntity>> getPopularMovies(parameters);
 
   Future<Either<Failure, Movie>> getMovieDetails(
     MovieDetailsParameters parameters,
   );
 
-  Future<Either<Failure, List<Movie>>> searchMovies(
+  Future<Either<Failure, ResponseEntity>> searchMovies(
     SearchMoviesParameters parameters,
   );
 }

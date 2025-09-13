@@ -14,7 +14,11 @@ class SearchCubit extends Cubit<SearchState> {
   final SearchMoviesUseCase searchMoviesUseCase;
   Timer? _debounce;
 
+  int page = 1;
+  int totalPages = 2;
+
   search(String query) {
+    if (page > totalPages) return;
     if (_debounce?.isActive ?? false) _debounce!.cancel();
 
     _debounce = Timer(const Duration(milliseconds: 600), () async {
@@ -23,17 +27,25 @@ class SearchCubit extends Cubit<SearchState> {
         return;
       }
 
-      emit(state.copyWith(status: RequestState.loading));
+      emit(state.copyWith(status: RequestState.loading, query: query));
       final result = await searchMoviesUseCase(
-        SearchMoviesParameters(query: query),
+        SearchMoviesParameters(query: query, page: page),
       );
+      print("==>search $result");
       result.fold(
         (failure) {
-          emit(state.copyWith(status: RequestState.error));
+          emit(
+            state.copyWith(
+              status: RequestState.error,
+              searchMessage: failure.message,
+            ),
+          );
         },
         (movies) {
-          print("==>search $movies");
-          emit(state.copyWith(status: RequestState.loaded, results: movies));
+          List<Movie> current = [...state.results, ...movies.results];
+          totalPages = movies.totalPages;
+          emit(state.copyWith(status: RequestState.loaded, results: current));
+          page++;
         },
       );
     });

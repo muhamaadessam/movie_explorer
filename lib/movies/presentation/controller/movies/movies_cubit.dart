@@ -11,8 +11,10 @@ class MoviesCubit extends Cubit<MoviesState> {
   MoviesCubit(this.getPopularMoviesUseCase) : super(MoviesState());
   final GetPopularMoviesUseCase getPopularMoviesUseCase;
   int page = 1;
+  int totalPages = 2;
 
   getPopularMovies() async {
+    if (page > totalPages) return;
     emit(state.copyWith(popularState: RequestState.loading));
     final result = await getPopularMoviesUseCase(
       GetPopularMoviesParameters(page: page),
@@ -24,8 +26,9 @@ class MoviesCubit extends Cubit<MoviesState> {
           popularMessage: l.message,
         ),
       ),
-      (r) {
-        var updatedMovies = [...state.popularMovies, ...r];
+      (movies) {
+        var updatedMovies = [...state.popularMovies, ...movies.results];
+        totalPages = movies.totalPages;
         emit(
           state.copyWith(
             popularState: RequestState.loaded,

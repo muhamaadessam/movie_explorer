@@ -4,15 +4,16 @@ import 'package:movie_explorer/core/error/failure.dart';
 import 'package:movie_explorer/core/usecase/base_usecase.dart';
 import 'package:movie_explorer/movies/domain/entities/movie.dart';
 import 'package:movie_explorer/movies/domain/repository/base_movies_repository.dart';
+import 'package:movie_explorer/movies/domain/usecases/search_movies_usecase.dart';
 
 class GetPopularMoviesUseCase
-    extends BaseUseCase<List<Movie>, GetPopularMoviesParameters> {
+    extends BaseUseCase<ResponseEntity, GetPopularMoviesParameters> {
   final BaseMoviesRepository baseMoviesRepository;
 
   GetPopularMoviesUseCase(this.baseMoviesRepository);
 
   @override
-  Future<Either<Failure, List<Movie>>> call(
+  Future<Either<Failure, ResponseEntity>> call(
     GetPopularMoviesParameters parameters,
   ) async {
     return await baseMoviesRepository.getPopularMovies(parameters);
