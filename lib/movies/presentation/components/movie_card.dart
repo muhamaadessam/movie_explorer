@@ -21,7 +21,6 @@ class MovieCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        // color: AppColors.mainColor,
         borderRadius: BorderRadius.circular(12.0),
       ),
       clipBehavior: Clip.antiAlias,
@@ -30,32 +29,31 @@ class MovieCard extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder:
-                  (context) => MovieDetailScreen(
-                    id: movie.id,
-                    movie: movie as MovieModel,
-                  ),
+              builder: (context) => MovieDetailScreen(
+                id: movie.id,
+                movie: movie as MovieModel,
+              ),
             ),
           );
         },
         child: Stack(
           children: [
             Positioned.fill(
-              child: ClipRRect(
-                borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-                child: CachedNetworkImage(
-                  // width: 120.0,
-                  height: 300.0,
-                  fit: BoxFit.cover,
-                  imageUrl: ApiConstance.imageUrl(movie.posterImage),
-                  placeholder:
-                      (context, url) =>
-                          CustomShimmer(height: 170.0, width: 120.0),
-                  errorWidget:
-                      (context, url, error) => Image.asset(
-                        Assets.pngImagePlaceholder,
-                        fit: BoxFit.cover,
-                      ),
+              child: Hero(
+                tag: 'movie_poster_${movie.id}',
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+                  child: CachedNetworkImage(
+                    height: 300.0,
+                    fit: BoxFit.cover,
+                    imageUrl: ApiConstance.imageUrl(movie.posterImage),
+                    placeholder: (context, url) =>
+                        CustomShimmer(height: 170.0, width: 120.0),
+                    errorWidget: (context, url, error) => Image.asset(
+                      Assets.pngImagePlaceholder,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -107,8 +105,8 @@ class MovieCard extends StatelessWidget {
                     right: 0,
                     child: IconButton(
                       icon: Icon(Icons.favorite, color: Colors.red[800]),
-                      onPressed:
-                          () => context.read<FavoritesCubit>().toggleFavorite(
+                      onPressed: () =>
+                          context.read<FavoritesCubit>().toggleFavorite(
                             movie as MovieModel,
                           ),
                     ),
