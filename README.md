@@ -96,7 +96,7 @@ lib/
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/movie_explorer.git
+   git clone https://github.com/muhamaadessam/movie_explorer.git
    cd movie_explorer
    ```
 
@@ -126,7 +126,27 @@ The app uses The Movie Database (TMDB) API. The API key is already configured in
 
 ## 📱 Screenshots
 
-*Add screenshots of your app here*
+### App Logo
+<div align="center">
+  <img src="assets/png/logo.png" alt="Movie Explorer Logo" width="200"/>
+</div>
+
+### App Screenshots
+<div align="center">
+  <img src="screenshots/movies_screen.png" alt="Movies Screen" width="200"/>
+  <img src="screenshots/movie_details.png" alt="Movie Details" width="200"/>
+  <img src="screenshots/search_screen.png" alt="Search Screen" width="200"/>
+  <img src="screenshots/favorites_screen.png" alt="Favorites Screen" width="200"/>
+</div>
+
+### Dark Mode
+<div align="center">
+  <img src="screenshots/dark_mode_movies.png" alt="Dark Mode Movies" width="200"/>
+  <img src="screenshots/dark_mode_details.png" alt="Dark Mode Details" width="200"/>
+</div>
+
+> 📸 *Screenshots showing the app's main features and dark/light theme support*
+
 
 ## 🎨 UI/UX Features
 
@@ -200,6 +220,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - All the open-source package contributors
 
 ## 📞 Contact
+Muhammad Essam - [@muhamaadessam](https://github.com/muhamaadessam) - muhammad159e@gmail.com - +20 1017022791
 
 Project Link: [https://github.com/muhamaadessam/movie_explorer](https://github.com/muhamaadessam/movie_explorer)
 
