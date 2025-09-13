@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../Network/Local/cache_helper.dart';
-
 extension ContextExtensions on BuildContext {
   // Get the current theme mode
-  ThemeMode get themeMode => Theme.of(this).brightness == Brightness.dark
-      ? ThemeMode.dark
-      : ThemeMode.light;
+  ThemeMode get themeMode =>
+      Theme.of(this).brightness == Brightness.dark
+          ? ThemeMode.dark
+          : ThemeMode.light;
 
   bool get isDarkMode => Theme.of(this).brightness == Brightness.dark;
 

@@ -3,13 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:movie_explorer/core/extensions/context_extension.dart';
 import 'package:movie_explorer/core/services/services_locator.dart';
-import 'package:movie_explorer/movies/presentation/screens/movies_screen.dart';
+import 'package:movie_explorer/features/movies/presentation/screens/movies_screen.dart';
 
 import 'core/network/Local/cache_helper.dart';
 import 'core/network/Remote/dio_helper.dart';
 import 'core/themes/theme_cubit/app_theme_cubit.dart';
-import 'movies/presentation/controller/favorites/favorites_cubit.dart';
-import 'movies/presentation/controller/search/search_cubit.dart';
+import 'features/favorites/presentation/controller/favorites_cubit.dart';
+import 'features/search/presentation/controller/search_cubit.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

@@ -42,7 +42,8 @@ class _CustomScaffoldState extends State<CustomScaffold> {
       setState(() => isLoading = true);
 
       // Updated API - now returns List<ConnectivityResult>
-      List<ConnectivityResult> results = await _connectivity.checkConnectivity();
+      List<ConnectivityResult> results =
+          await _connectivity.checkConnectivity();
       if (!mounted) return;
 
       await _updateConnectionStatus(results);
@@ -59,7 +60,9 @@ class _CustomScaffoldState extends State<CustomScaffold> {
 
   Future<void> _updateConnectionStatus(List<ConnectivityResult> results) async {
     // Check if any of the connectivity results indicate connection
-    bool hasConnection = results.any((result) => result != ConnectivityResult.none);
+    bool hasConnection = results.any(
+      (result) => result != ConnectivityResult.none,
+    );
 
     if (hasConnection) {
       try {
@@ -118,11 +121,7 @@ class _CustomScaffoldState extends State<CustomScaffold> {
   Widget build(BuildContext context) {
     // Show loading while checking connectivity
     if (isLoading) {
-      return const Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(),
-        ),
-      );
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
     // Show connectivity error

@@ -31,7 +31,7 @@ class ErrorScreen extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: Colors.red.withOpacity(0.1),
+                    color: Colors.red.withValues(alpha: 0.1),
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
@@ -47,14 +47,16 @@ class ErrorScreen extends StatelessWidget {
                 Text(
                   message,
                   textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    color: const Color(0xffc2c2c2),
-                    fontWeight: FontWeight.bold,
-                  ) ?? const TextStyle(
-                    fontSize: 18,
-                    color: Color(0xffc2c2c2),
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style:
+                      Theme.of(context).textTheme.headlineSmall?.copyWith(
+                        color: const Color(0xffc2c2c2),
+                        fontWeight: FontWeight.bold,
+                      ) ??
+                      const TextStyle(
+                        fontSize: 18,
+                        color: Color(0xffc2c2c2),
+                        fontWeight: FontWeight.bold,
+                      ),
                 ),
 
                 const SizedBox(height: 32),
